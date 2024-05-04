@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Aplicacion_Banco.Models.Usuario
+
+<div class="container">
+    @if(Model != null)
+    {
+        <div class="alert alert-success">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5>Registro exitoso</h5>
+                <h5 class="btn btn-sm btn-primary">
+                    <a class="text-decoration-none text-white" asp-area="" asp-controller="Auth" asp-action="Login">
+                        Inicia sesion
+                    </a></h5>
+            </div>
+        </div>
+        
+    }
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Resgistrate</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Auth" asp-action="Register" method="post">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" asp-for="Nombre" placeholder="Ingresa tu nombre" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="text" class="form-control" asp-for="Edad" placeholder="Ingresa tu edad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Direccion</label>
+                            <input type="text" class="form-control" asp-for="Direccion" placeholder="Ingresa tu direccion" required>
+                        </div>                  
+
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" asp-for="Correo" placeholder="Ingresa tu correo electrónico" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" asp-for="Contrasena" placeholder="Ingresa tu contraseña" required>
+                        </div>
+
+                       @* <div class="mb-3">
+                            <label for="conf_contrasena" class="form-label">Repite tu contraseña</label>
+                            <input type="password" class="form-control" asp-for="ConfContrasena" placeholder="Repite tu contraseña" required>
+                        </div>*@
+                        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+                    </form>
+
+                    <br />
+                    <p>
+                        ¿Ya tienes una cuenta?
+                        <a class="text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Inicia sesion</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

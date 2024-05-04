@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Aplicacion_Banco.Models.Prestamo;
+@{
+    // Calcula el porcentaje de interés
+    string? porcentajeInteres = (Model.IdDuracionNavigation.Interes * 100).ToString();
+    porcentajeInteres = porcentajeInteres.Replace(",", ".");
+    int indexPoint = porcentajeInteres.IndexOf('.');
+
+    porcentajeInteres = porcentajeInteres.Substring(0, indexPoint + 3);
+}
+
+<a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Prestatario" asp-action="Index">Volver</a>
+
+<div class="card mt-2">
+    <div class="card-header">
+        Sr. @Model.IdPrestatarioNavigation.Nombre tiene una tasa de @porcentajeInteres % en @Model.IdDuracionNavigation.Duracion1 dias
+    </div>
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+            <p>Monto: </p>
+            <p>@Model.IdMontoNavigation.Valor</p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <p>Fecha inicio: </p>
+            <p>@Model.FechaInicio</p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <p>Fecha fin: </p>
+            <p>@Model.FechaFin</p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <p>Dias: </p>
+            <p>@Model.IdDuracionNavigation.Duracion1 dias</p>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between">
+            <p>Pago diario: </p>
+            <p>@Model.PagoDiario soles</p>
+        </div>
+    </div>
+</div>

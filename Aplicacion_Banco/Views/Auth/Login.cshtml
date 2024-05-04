@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Aplicacion_Banco.Models.Usuario
+
+<div class="container">
+     @if(Model != null)
+    {
+        <div class="alert alert-danger">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5>No se reconoce el usuario</h5>            
+            </div>
+        </div>
+    }
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Iniciar Sesión</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Auth" asp-action="ValidarUsuario" method="post">
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" asp-for="Correo" placeholder="Ingresa tu correo electrónico" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" asp-for="Contrasena" placeholder="Ingresa tu contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                    </form>
+                    <br />
+                    <p>
+                        ¿No tienes una cuenta?
+                        <a class="text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Registrar">Crea tu cuenta</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
