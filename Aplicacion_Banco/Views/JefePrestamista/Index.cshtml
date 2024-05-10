@@ -8,61 +8,84 @@
 @model Aplicacion_Banco.Models.Usuario
 
 
-<a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Volver</a>
+<style>
+    .link-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
 
-<h5 class="mt-2">Jefe de Prestamista</h5>
+        .link-container a {
+            margin-left: 10px;
+            text-decoration: none;
+        }
+
+            .link-container a:not(:last-child) {
+                border-right: 1px solid #ccc; 
+                padding-right: 10px; 
+            }
+</style>
+
 
 <div class="container">
-    @if (Model != null)
-    {
-        <div class="alert alert-success">
-            <div class="d-flex align-items-center justify-content-between">
-                <h5>Se ha creado exitosamente el Prestamista</h5>
-            </div>
-        </div>
-
-    }
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title text-center">Crear Prestamista</h2>
-                </div>
-                <div class="card-body">
-                    <form asp-controller="JefePrestamista" asp-action="CrearPrestamista" method="post">
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" asp-for="Nombre" placeholder="Ingresa tu nombre" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="edad" class="form-label">Edad</label>
-                            <input type="text" class="form-control" asp-for="Edad" placeholder="Ingresa tu edad" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="direccion" class="form-label">Direccion</label>
-                            <input type="text" class="form-control" asp-for="Direccion" placeholder="Ingresa tu direccion" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="correo" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" asp-for="Correo" placeholder="Ingresa tu correo electrónico" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="contrasena" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" asp-for="Contrasena" placeholder="Ingresa tu contraseña" required>
-                        </div>
-
-                        @* <div class="mb-3">
-                        <label for="conf_contrasena" class="form-label">Repite tu contraseña</label>
-                        <input type="password" class="form-control" asp-for="ConfContrasena" placeholder="Repite tu contraseña" required>
-                        </div>*@
-                        <button type="submit" class="btn btn-primary">Crear Prestamista</button>
-                    </form>
-                    <br />
-                </div>
-            </div>
-        </div>
+    <div class="link-container">
+        <a class="btn btn-primary" asp-area="" asp-controller="Auth" asp-action="Login">Cerrar Sesión</a>
+        <a class="btn btn-primary" asp-action="Listado" asp-controller="JefePrestamista">Ir al listado de Prestamistas</a>
     </div>
+
+    <h5 class="mt-2">Jefe de Prestamista</h5>
+
+    <div class="container">
+        @if (Model != null)
+        {
+            <div class="alert alert-success">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5>Se ha creado exitosamente el Prestamista</h5>
+                </div>
+            </div>
+
+        }
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title text-center">Crear Prestamista</h2>
+                    </div>
+                    <div class="card-body">
+                        <form asp-controller="JefePrestamista" asp-action="CrearPrestamista" method="post">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" asp-for="Nombre" placeholder="Ingresa tu nombre" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="edad" class="form-label">Edad</label>
+                                <input type="text" class="form-control" asp-for="Edad" placeholder="Ingresa tu edad" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="direccion" class="form-label">Direccion</label>
+                                <input type="text" class="form-control" asp-for="Direccion" placeholder="Ingresa tu direccion" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" asp-for="Correo" placeholder="Ingresa tu correo electrónico" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contrasena" class="form-label">Contraseña</label>
+                                <input type="password" class="form-control" asp-for="Contrasena" placeholder="Ingresa tu contraseña" required>
+                            </div>
+
+                            @* <div class="mb-3">
+                            <label for="conf_contrasena" class="form-label">Repite tu contraseña</label>
+                            <input type="password" class="form-control" asp-for="ConfContrasena" placeholder="Repite tu contraseña" required>
+                            </div>*@
+                            <button type="submit" class="btn btn-primary">Crear Prestamista</button>
+                        </form>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>

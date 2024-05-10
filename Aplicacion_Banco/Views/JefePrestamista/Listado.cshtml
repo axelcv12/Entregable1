@@ -1,0 +1,45 @@
+﻿@model List<Aplicacion_Banco.Models.Usuario>
+
+<a class="btn btn-primary" asp-area="" asp-controller="JefePrestamista" asp-action="Index">Volver</a>
+
+<h5 class="mt-2">Listado de Prestamistas</h5>
+
+<div class="container">
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Dirección</th>
+                        <th>Correo Electrónico</th>
+                        <th>Acciones</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prestamista in Model)
+                    {
+                        <tr>
+                            <td>@prestamista.Nombre</td>
+                            <td>@prestamista.Edad</td>
+                            <td>@prestamista.Direccion</td>
+                            <td>@prestamista.Correo</td>
+                            <td>
+                                <a asp-action="ActualizarPrestamista" asp-route-id="@prestamista.Id" class="btn btn-primary">Actualizar</a>
+                                <a asp-action="EliminarPrestamista" asp-route-id="@prestamista.Id" class="btn btn-danger">Eliminar</a>
+                            </td> 
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
