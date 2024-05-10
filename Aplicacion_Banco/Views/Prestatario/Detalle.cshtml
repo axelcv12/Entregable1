@@ -5,13 +5,46 @@
 }
 @model Aplicacion_Banco.Models.Prestamo;
 @{
-    // Calcula el porcentaje de interés
-    string? porcentajeInteres = (Model.IdDuracionNavigation.Interes * 100).ToString();
-    porcentajeInteres = porcentajeInteres.Replace(",", ".");
-    int indexPoint = porcentajeInteres.IndexOf('.');
+    decimal? interes = Model.IdDuracionNavigation.Interes;
+    decimal? porcentajeInteres = interes * 100;
+    string porcentajeInteresStr = porcentajeInteres?.ToString("0.00");
 
-    porcentajeInteres = porcentajeInteres.Substring(0, indexPoint + 3);
+
+    int diasPrestamo = Model.IdDuracionNavigation.Duracion1 ?? 0;
+    decimal monto = Model.IdMontoNavigation.Valor ?? 0;
+
+
+    decimal montoTotalConIntereses = 0;
+
+    if (interes != null && diasPrestamo != 0)
+    {
+
+        decimal interesPorcentaje = 0;
+        switch (diasPrestamo)
+        {
+            case 15:
+                interesPorcentaje = 0.050m;
+                break;
+            case 20:
+                interesPorcentaje = 0.066m;
+                break;
+            case 25:
+                interesPorcentaje = 0.083m;
+                break;
+            case 30:
+                interesPorcentaje = 0.100m;
+                break;
+            case 35:
+                interesPorcentaje = 0.116m;
+                break;
+
+        }
+
+
+        montoTotalConIntereses = Math.Round((monto * (1 + interesPorcentaje) * (diasPrestamo / 30m)), 2) + monto;
+    }
 }
+
 
 <a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Prestatario" asp-action="Index">Volver</a>
 
@@ -36,8 +69,8 @@
         </div>
 
         <div class="d-flex align-items-center justify-content-between">
-            <p>Dias: </p>
-            <p>@Model.IdDuracionNavigation.Duracion1 dias</p>
+            <p>Días: </p>
+            <p>@Model.IdDuracionNavigation.Duracion1 días</p>
         </div>
 
         <div class="d-flex align-items-center justify-content-between">
