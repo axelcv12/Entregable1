@@ -1,103 +1,87 @@
-﻿
-@model Aplicacion_Banco.Models.VistaPrestamo
+﻿@model Aplicacion_Banco.Models.VistaPrestamo
 @{
     ViewData["Title"] = "Home Page";
 }
 
+<a class="btn btn-primary" asp-area="" asp-controller="Auth" asp-action="Login">Volver</a>
 
-<a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Volver</a>
-
-<div class="d-flex align-items-start justify-content-between mt-2">
-
-    <div class="w-50 mx-2">
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title text-center">Crear Prestamo</h2>
-            </div>
-            <div class="card-body">
-                <form asp-controller="Prestatario" asp-action="CrearPrestamo" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">Monto</label>
-                        <select class="form-control form-select" asp-for="Prestamo.IdMonto" required>
-                            <option selected></option>
-                            @foreach (var item in Model.Montos)
-                            {
-                                <option value="@item.Id">@item.Valor</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Duracion</label>
-                        <select class="form-control form-select" asp-for="Prestamo.IdDuracion" required>
-                            <option selected></option>
-                            @foreach (var item in Model.Duraciones)
-                            {
-                                <option value="@item.Id">@item.Duracion1 dias</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Fecha de inicio</label>
-                        <input type="date" class="form-control" asp-for="Prestamo.FechaInicio" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Zona</label>
-                        <input type="text" class="form-control" asp-for="Prestamo.Zona" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Numero de cuenta</label>
-                        <input type="number" class="form-control" asp-for="Prestamo.NumeroCuenta" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Metodo de pago</label>
-                        <select class="form-control form-select" asp-for="Prestamo.IdMetodoPago" required>
-                            <option selected></option>
-                            @foreach (var item in Model.Metodopagos)
-                            {
-                                <option value="@item.Id">@item.Nombre</option>
-                            }
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Seleccionar Prestamista</label>
-                        <select class="form-control form-select" asp-for="Prestamo.IdPrestamista" required>
-                            <option selected></option>
-                            @foreach (var item in Model.Prestamistas)
-                            {
-                                <option value="@item.Id">@item.Nombre</option>
-                            }
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Solicitar</button>
-                </form>
-            </div>
+<div class="w-50 mx-2">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title text-center">Crear Préstamo</h2>
         </div>
-           
+        <div class="card-body">
+            <form asp-controller="Prestatario" asp-action="CrearPrestamo" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Monto</label>
+                    <select class="form-control form-select" asp-for="Prestamo.IdMonto" required>
+                        <option selected></option>
+                        @foreach (var item in Model.Montos)
+                        {
+                            <option value="@item.Id">@item.Valor</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Duración</label>
+                    <select class="form-control form-select" asp-for="Prestamo.IdDuracion" required>
+                        <option selected></option>
+                        @foreach (var item in Model.Duraciones)
+                        {
+                            <option value="@item.Id">@item.Duracion1 días</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de inicio</label>
+                    <input type="date" class="form-control" asp-for="Prestamo.FechaInicio" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Zona</label>
+                    <input type="text" class="form-control" asp-for="Prestamo.Zona" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Número de cuenta</label>
+                    <input type="number" class="form-control" asp-for="Prestamo.NumeroCuenta" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Método de pago</label>
+                    <select class="form-control form-select" asp-for="Prestamo.IdMetodoPago" required>
+                        <option selected></option>
+                        @foreach (var item in Model.Metodopagos)
+                        {
+                            <option value="@item.Id">@item.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Solicitar</button>
+            </form>
+        </div>
     </div>
+</div>
 
-
-    <div class="w-50 mx-2">
-        <h4>Tus prestamos</h4>
-        <table class="table">
-            <thead">
-                <tr>
-                    <th scope="col">Monto</th>
-                    <th scope="col">Prestamista</th>
-                    <th scope="col">Metodo de Pago</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Accion</th>
-                </tr>
+<div class="w-50 mx-2">
+    <h4>Tus préstamos</h4>
+    <table class="table">
+        <thead">
+            <tr>
+                <th scope="col">Monto</th>
+                <th scope="col">Prestamista</th>
+                <th scope="col">Método de Pago</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acción</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var prestamo in Model.Prestamos)
-                {
+        @foreach (var prestamo in Model.Prestamos)
+        {
                     <tr>
                         <th scope="row">@prestamo.IdMontoNavigation.Valor</th>
                         <td>@prestamo.IdPrestamistaNavigation.Nombre</td>
@@ -107,9 +91,7 @@
                             <a class="btn btn-sm border-1 text-primary" href="@Url.Action("Detalle", "Prestatario", new { id = prestamo.Id })">Detalle</a>
                         </td>
                     </tr>
-                }
+        }
             </tbody>
-        </table>   
-    </div>
+    </table>
 </div>
-
