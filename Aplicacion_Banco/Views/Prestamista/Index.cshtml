@@ -1,9 +1,79 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model Aplicacion_Banco.Models.Usuario
 
-<a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Volver</a>
+<style>
+    .link-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
 
-<h5 class="mt-2">Prestamista</h5>
+        .link-container a {
+            margin-left: 10px;
+            text-decoration: none;
+        }
+
+            .link-container a:not(:last-child) {
+                border-right: 1px solid #ccc;
+                padding-right: 10px;
+            }
+</style>
+
+<div class="container">
+    <div class="link-container">
+        <a asp-controller="Auth" asp-action="Login" class="btn btn-primary">Cerrar Sesión</a>
+        <a asp-controller="Prestamista" asp-action="Listado" class="btn btn-primary">Ir al Listado de Prestatarios</a>
+        <a asp-controller="Prestamista" asp-action="SolicitudesRecibidas" class="btn btn-primary">Ver Solicitudes Recibidas</a>
+    </div>
+
+    <h5 class="mt-2">Prestamista</h5>
+
+    @if (Model != null)
+    {
+        <div class="alert alert-success">
+            <div class="d-flex align-items-center justify-content-between">
+                <h5>Se ha creado exitosamente el Prestatario</h5>
+            </div>
+        </div>
+    }
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title text-center">Crear Prestatario</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Prestamista" asp-action="CrearPrestatario" method="post">
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" asp-for="Nombre" placeholder="Ingresa el nombre" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="text" class="form-control" asp-for="Edad" placeholder="Ingresa la edad" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" asp-for="Direccion" placeholder="Ingresa la dirección" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="correo" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" asp-for="Correo" placeholder="Ingresa el correo electrónico" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="contrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" asp-for="Contrasena" placeholder="Ingresa la contraseña" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Crear Prestatario</button>
+                    </form>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
