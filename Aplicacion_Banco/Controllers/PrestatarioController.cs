@@ -45,43 +45,107 @@ namespace Aplicacion_Banco.Controllers
         {
             int? userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId");
 
-            Prestamo prestamo = vistaPrestamo.Prestamo;
-            prestamo.Estado = "Pendiente";
-            prestamo.FechaFin = SumarDiasLaborales(prestamo.FechaInicio.GetValueOrDefault(), 30);
-            prestamo.IdPrestatario = userId;
-            prestamo.PagoDiario = ObtenerPagoDiario(prestamo);
+            // Obtener el ID del prestamista registrador del prestatario actual desde la base de datos
+            int? prestamistaRegistradorId = _db.Usuarios
+                .Where(u => u.Id == userId)
+                .Select(u => u.IdUsuarioCreador)
+                .FirstOrDefault();
 
-            _db.Prestamos.Add(prestamo);
-            _db.SaveChanges();
+            // Si se pudo obtener el ID del prestamista registrador, proceder con la creación del préstamo
+            if (prestamistaRegistradorId != null)
+            {
+                Prestamo prestamo = vistaPrestamo.Prestamo;
+                prestamo.Estado = "Pendiente";
 
-            return RedirectToAction("Index");
+                // Sumar la duración del préstamo en días a la fecha de inicio
+                prestamo.FechaFin = prestamo.FechaInicio.GetValueOrDefault().AddDays(prestamo.IdDuracionNavigation?.Duracion1 ?? 0);
+
+                prestamo.IdPrestatario = userId;
+                prestamo.IdPrestamista = prestamistaRegistradorId; // Asignar el ID del prestamista registrador al préstamo
+
+                prestamo.PagoDiario = ObtenerPagoDiario(prestamo);
+
+                _db.Prestamos.Add(prestamo);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");// Redireccionar a alguna vista adecuada
         }
+
 
         public IActionResult Detalle(int id)
         {
-            Prestamo prestamo = _db.Prestamos.Where(p => p.Id == id)
-                .Include(p => p.IdPrestatarioNavigation)
-                .Include(p => p.IdMontoNavigation)
-                .Include(p => p.IdDuracionNavigation)
-                .FirstOrDefault();
+            Prestamo prestamo = _db.Prestamos
+               .Include(p => p.IdPrestatarioNavigation)
+               .Include(p => p.IdMontoNavigation)
+               .Include(p => p.IdDuracionNavigation)
+               .FirstOrDefault(p => p.Id == id);
 
-            return View(prestamo);
+            if (prestamo != null)
+            {
+                // Calcular el monto total sumando el interés al monto inicial
+                decimal montoTotal = Math.Round((prestamo.IdMontoNavigation?.Valor ?? 0) * (1 + (prestamo.IdDuracionNavigation?.Interes ?? 0)), 2);
+
+                // Calcular los días laborables en el rango del préstamo
+                int diasLaborables = CalcularDiasLaborables(prestamo.FechaInicio.GetValueOrDefault(), prestamo.IdDuracionNavigation?.Duracion1 ?? 0);
+
+                // Calcular el pago diario basado en los días laborables
+                decimal pagoDiario = diasLaborables != 0 ? Math.Round(montoTotal / diasLaborables, 3) : 0;
+
+                // Asignar el pago diario al modelo
+                prestamo.PagoDiario = pagoDiario;
+
+                // Sumar la duración del préstamo a la fecha de inicio
+                prestamo.FechaFin = SumarDias(prestamo.FechaInicio.GetValueOrDefault(), prestamo.IdDuracionNavigation?.Duracion1 ?? 0);
+
+                // Devolver la vista con el préstamo y sus detalles calculados
+                return View(prestamo);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         public decimal? ObtenerPagoDiario(Prestamo prestamo)
         {
             decimal? montoDiario;
 
-            decimal? monto = _db.Montos.First(m => m.Id == prestamo.IdMonto).Valor;
-            decimal? interes = _db.Duracions.First(d => d.Id == prestamo.IdDuracion).Interes;
-            int? diasDuracion = _db.Duracions.First(d => d.Id == prestamo.IdDuracion).Duracion1;
+            decimal? monto = _db.Montos.FirstOrDefault(m => m.Id == prestamo.IdMonto)?.Valor;
+            decimal? interes = _db.Duracions.FirstOrDefault(d => d.Id == prestamo.IdDuracion)?.Interes;
+            int? diasDuracion = _db.Duracions.FirstOrDefault(d => d.Id == prestamo.IdDuracion)?.Duracion1;
 
-            decimal? montoConInteres = monto + (monto * interes);
+            if (monto != null && interes != null && diasDuracion != null && diasDuracion != 0)
+            {
+                decimal montoConInteres = monto.Value * (1 + interes.Value);
 
-            montoDiario = montoConInteres / diasDuracion;
-                        
-            return Math.Round(montoDiario.GetValueOrDefault(), 3);
+                // Calcular la fecha de finalización basada en los días laborables
+                DateTime fechaInicio = prestamo.FechaInicio.GetValueOrDefault();
+                DateTime fechaFin = SumarDiasLaborales(fechaInicio, diasDuracion.Value);
+
+                // Contar los días laborables en el rango del préstamo
+                int diasLaborables = 0;
+                for (DateTime fecha = fechaInicio; fecha <= fechaFin; fecha = fecha.AddDays(1))
+                {
+                    if (fecha.DayOfWeek != DayOfWeek.Saturday && fecha.DayOfWeek != DayOfWeek.Sunday)
+                    {
+                        diasLaborables++;
+                    }
+                }
+
+                // Calcular el pago diario basado en los días laborables
+                montoDiario = Math.Round(montoConInteres / diasLaborables, 3);
+            }
+            else
+            {
+                montoDiario = null;
+            }
+
+            return montoDiario;
         }
+
 
         public DateTime SumarDiasLaborales(DateTime fechaInicio, int dias)
         {
@@ -100,6 +164,31 @@ namespace Aplicacion_Banco.Controllers
             }
 
             return fechaFin;
+        }
+
+        public DateTime SumarDias(DateTime fechaInicio, int dias)
+        {
+            return fechaInicio.AddDays(dias);
+        }
+
+
+        private int CalcularDiasLaborables(DateTime fechaInicio, int dias)
+        {
+            DateTime fechaFin = fechaInicio;
+            int diasLaborables = 0;
+            int diasAgregados = 0;
+
+            while (diasAgregados < dias)
+            {
+                fechaFin = fechaFin.AddDays(1);
+                if (fechaFin.DayOfWeek != DayOfWeek.Saturday && fechaFin.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    diasLaborables++;
+                    diasAgregados++;
+                }
+            }
+
+            return diasLaborables;
         }
 
     }

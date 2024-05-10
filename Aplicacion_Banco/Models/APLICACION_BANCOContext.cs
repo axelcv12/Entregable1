@@ -16,6 +16,7 @@ namespace Aplicacion_Banco.Models
         {
         }
 
+        //Traemos las demas entidades
         public virtual DbSet<Duracion> Duracions { get; set; } = null!;
         public virtual DbSet<Metodopago> Metodopagos { get; set; } = null!;
         public virtual DbSet<Monto> Montos { get; set; } = null!;
