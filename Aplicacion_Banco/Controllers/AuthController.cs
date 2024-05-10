@@ -17,10 +17,9 @@ namespace Aplicacion_Banco.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Login()
-        {   
+        {
             return View();
         }
-        //git prueba pull
 
         public IActionResult Registrar()
         {
@@ -31,12 +30,12 @@ namespace Aplicacion_Banco.Controllers
         public IActionResult ValidarUsuario(Usuario model)
         {
             Usuario usuario = _db.Usuarios.FirstOrDefault(u => u.Correo == model.Correo && u.Contrasena == model.Contrasena);
-            if(usuario == null)
+            if (usuario == null)
             {
                 return View("Login", model);
             }
             _httpContextAccessor.HttpContext.Session.SetInt32("UserId", usuario.Id);
-                        
+
             if (usuario.IdRol == 1)
             {
                 return RedirectToAction("Index", "Inversionista");
