@@ -4,23 +4,43 @@
 @{
 }
 
+
 @model Aplicacion_Banco.Models.Usuario
 
+<style>
+    
+    .link-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
 
-<a class="mt-5 text-primary nav-link" asp-area="" asp-controller="Auth" asp-action="Login">Volver</a>
+    .link-container a {
+        margin-left: 10px; 
+        text-decoration: none;
+    }
 
-<h5 class="mt-2">Inversionista</h5>
+    .link-container a:not(:last-child) {
+        border-right: 1px solid #ccc; 
+        padding-right: 10px; 
+    }
+</style>
 
 <div class="container">
+    <div class="link-container">
+        <a class="btn btn-primary" asp-area="" asp-controller="Auth" asp-action="Login">Cerrar Sesión</a>
+        <a class="btn btn-primary" asp-action="Listado" asp-controller="Inversionista">Ir al listado de Jefes de Prestamistas</a>
+    </div>
+
     @if (Model != null)
     {
         <div class="alert alert-success">
             <div class="d-flex align-items-center justify-content-between">
-                <h5>Se ha creado exitosamente el Jefe de Prestamista</h5>                
+                <h5>Se ha creado exitosamente el Jefe de Prestamista</h5>
             </div>
         </div>
-
     }
+
     <div class="row justify-content-center mt-5">
         <div class="col-md-6">
             <div class="card">
@@ -57,6 +77,7 @@
                         <label for="conf_contrasena" class="form-label">Repite tu contraseña</label>
                         <input type="password" class="form-control" asp-for="ConfContrasena" placeholder="Repite tu contraseña" required>
                         </div>*@
+
                         <button type="submit" class="btn btn-primary">Crear Jefe de Prestamista</button>
                     </form>
                     <br />
