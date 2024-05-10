@@ -20,6 +20,7 @@ namespace Aplicacion_Banco.Controllers
         {   
             return View();
         }
+        //git prueba pull
 
         public IActionResult Registrar()
         {
